@@ -3,12 +3,19 @@
 {{define "title"}}{{if .CurrentPath}}/{{.CurrentPath}}{{else}}Dashboard{{end}} — LinkPath{{end}}
 
 {{define "content"}}
+<header class="mobile-header">
+    <a href="/" class="brand">LinkPath</a>
+    <form method="POST" action="/~/logout" class="inline-form">
+        <button type="submit" class="btn btn-ghost btn-sm">Logout</button>
+    </form>
+</header>
 <div class="path-layout">
     <!-- Sidebar -->
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2 class="sidebar-title">Paths</h2>
+        <div class="sidebar-brand">
+            <a href="/" class="brand">LinkPath</a>
         </div>
+
         <nav class="sidebar-nav">
             <a href="/" class="sidebar-home {{if not .CurrentPath}}active{{end}}">&#127968; Home</a>
 
@@ -44,6 +51,13 @@
             </div>
             {{end}}
         </nav>
+
+        <div class="sidebar-user">
+            <span class="user-email">{{.User.Email}}</span>
+            <form method="POST" action="/~/logout" class="inline-form">
+                <button type="submit" class="btn btn-ghost btn-sm">Logout</button>
+            </form>
+        </div>
     </aside>
 
     <!-- Main content -->

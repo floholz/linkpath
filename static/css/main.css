@@ -30,7 +30,6 @@
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   --sidebar-width: 280px;
-  --header-height: 60px;
 }
 
 /* ===========================
@@ -79,28 +78,6 @@ code {
   color: #a78bfa;
 }
 
-/* ===========================
-   Header
-   =========================== */
-.site-header {
-  height: var(--header-height);
-  background: var(--color-bg-secondary);
-  border-bottom: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.header-inner {
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
 .brand {
   font-size: 1.25rem;
   font-weight: 700;
@@ -112,29 +89,6 @@ code {
 .brand:hover {
   color: var(--color-primary-hover);
   text-decoration: none;
-}
-
-.header-nav {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.user-email {
-  color: var(--color-text-secondary);
-  font-size: 0.875rem;
-}
-
-/* ===========================
-   Footer
-   =========================== */
-.site-footer {
-  margin-top: auto;
-  padding: 1.5rem;
-  text-align: center;
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
-  border-top: 1px solid var(--color-border);
 }
 
 /* ===========================
@@ -363,7 +317,7 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - var(--header-height) - 80px);
+  min-height: 100vh;
   padding: 2rem 1rem;
 }
 
@@ -540,9 +494,13 @@ code {
 /* ===========================
    Path Layout
    =========================== */
+.mobile-header {
+  display: none;
+}
+
 .path-layout {
   display: flex;
-  min-height: calc(100vh - var(--header-height) - 80px);
+  min-height: 100vh;
   margin: 0 auto;
   width: 100%;
 }
@@ -555,27 +513,42 @@ code {
   min-width: var(--sidebar-width);
   background: var(--color-bg-secondary);
   border-right: 1px solid var(--color-border);
-  overflow-y: auto;
   position: sticky;
-  top: var(--header-height);
-  height: calc(100vh - var(--header-height));
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebar-header {
-  padding: 1.25rem 1rem 0.75rem;
+.sidebar-brand {
+  padding: 1.1rem 1rem;
   border-bottom: 1px solid var(--color-border);
-}
-
-.sidebar-title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-text-muted);
+  flex-shrink: 0;
 }
 
 .sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
   padding: 0.75rem 0;
+}
+
+.sidebar-user {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.user-email {
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .sidebar-home {
@@ -1124,6 +1097,19 @@ details[open] .ancestor-summary::before {
    Responsive
    =========================== */
 @media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    height: 52px;
+    background: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
   .path-layout {
     flex-direction: column;
   }
@@ -1135,6 +1121,11 @@ details[open] .ancestor-summary::before {
     position: static;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
+  }
+
+  .sidebar-brand,
+  .sidebar-user {
+    display: none;
   }
 
   .path-main {
@@ -1157,6 +1148,18 @@ details[open] .ancestor-summary::before {
 
   .landing-title {
     font-size: 2rem;
+  }
+
+  .example-path {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .example-path.child,
+  .example-path.child-2 {
+    padding-left: 0.75rem;
+    border-left: 2px solid var(--color-border);
   }
 
   .add-buttons {

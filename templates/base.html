@@ -9,32 +9,9 @@
     <script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
 </head>
 <body>
-    <header class="site-header">
-        <div class="header-inner">
-            <a href="/" class="brand">LinkPath</a>
-            {{if .User}}
-            <nav class="header-nav">
-                <span class="user-email">{{.User.Email}}</span>
-                <form method="POST" action="/~/logout" class="inline-form">
-                    <button type="submit" class="btn btn-ghost">Logout</button>
-                </form>
-            </nav>
-            {{else}}
-            <nav class="header-nav">
-                <a href="/~/login" class="btn btn-ghost">Login</a>
-                <a href="/~/register" class="btn btn-primary">Register</a>
-            </nav>
-            {{end}}
-        </div>
-    </header>
-
     <main class="main-content">
         {{block "content" .}}{{end}}
     </main>
-
-    <footer class="site-footer">
-        <p>LinkPath &mdash; your URL-path-aware link &amp; note aggregator</p>
-    </footer>
 </body>
 </html>
 {{end}}
