@@ -1,0 +1,93 @@
+{{define "add_form.html"}}
+<div class="add-form-container">
+    <form
+        hx-post="/~/items"
+        hx-target="#items-list"
+        hx-swap="afterbegin"
+        hx-on::after-request="if(event.detail.successful) { document.getElementById('add-item-container').innerHTML = document.getElementById('add-item-container').dataset.original || '' }"
+        class="add-form"
+    >
+        <input type="hidden" name="current_path" value="{{.CurrentPath}}">
+        <input type="hidden" name="type" value="{{.Type}}">
+
+        <div class="form-header">
+            <h3 class="form-title">
+                {{if eq .Type "link"}}&#128279; Add Link{{else}}&#128196; Add Note{{end}}
+            </h3>
+            <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                onclick="restoreAddButtons()"
+            >Cancel</button>
+        </div>
+
+        <div class="form-group">
+            <label for="add-title" class="form-label">Title <span class="form-optional">(optional)</span></label>
+            <input
+                type="text"
+                id="add-title"
+                name="title"
+                class="form-input"
+                placeholder="Descriptive title..."
+                maxlength="200"
+                autofocus
+            >
+        </div>
+
+        {{if eq .Type "link"}}
+        <div class="form-group">
+            <label for="add-url" class="form-label">URL</label>
+            <input
+                type="url"
+                id="add-url"
+                name="url"
+                class="form-input"
+                placeholder="https://example.com"
+            >
+        </div>
+        {{else}}
+        <div class="form-group">
+            <label for="add-body" class="form-label">Content <span class="form-hint">(Markdown supported)</span></label>
+            <textarea
+                id="add-body"
+                name="body"
+                class="form-textarea"
+                placeholder="Write your note in Markdown..."
+                rows="5"
+            ></textarea>
+        </div>
+        {{end}}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button
+                type="button"
+                class="btn btn-ghost"
+                onclick="restoreAddButtons()"
+            >Cancel</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function restoreAddButtons() {
+    document.getElementById('add-item-container').innerHTML = `
+        <div class="add-buttons">
+            <button
+                class="btn btn-primary"
+                hx-get="/~/items/add-form?path={{.CurrentPath}}&type=link"
+                hx-target="#add-item-container"
+                hx-swap="innerHTML"
+            >+ Add Link</button>
+            <button
+                class="btn btn-secondary"
+                hx-get="/~/items/add-form?path={{.CurrentPath}}&type=note"
+                hx-target="#add-item-container"
+                hx-swap="innerHTML"
+            >+ Add Note</button>
+        </div>
+    `;
+    htmx.process(document.getElementById('add-item-container'));
+}
+</script>
+{{end}}

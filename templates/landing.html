@@ -1,0 +1,61 @@
+{{template "base" .}}
+
+{{define "title"}}LinkPath — URL-path-aware link aggregator{{end}}
+
+{{define "content"}}
+<div class="landing">
+    <div class="landing-hero">
+        <h1 class="landing-title">LinkPath</h1>
+        <p class="landing-tagline">Your URL-path-aware link &amp; note aggregator</p>
+        <p class="landing-desc">
+            Prepend <code>links.floholz.dev/</code> to any URL path to get a personal page
+            for storing links and notes, organized by the path hierarchy.
+        </p>
+        <div class="landing-actions">
+            <a href="/~/register" class="btn btn-primary btn-lg">Get Started</a>
+            <a href="/~/login" class="btn btn-outline btn-lg">Sign In</a>
+        </div>
+    </div>
+
+    <div class="landing-features">
+        <div class="feature-card">
+            <div class="feature-icon">&#128279;</div>
+            <h3>Path-Organized</h3>
+            <p>Your links and notes live at paths. <code>/github.com/user/repo</code> keeps all your notes about that repo in one place.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128196;</div>
+            <h3>Links &amp; Notes</h3>
+            <p>Save links with titles, or write Markdown notes. Everything is rendered beautifully in context.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128336;</div>
+            <h3>Hierarchical</h3>
+            <p>Browse ancestor paths to see related content. The sidebar shows all descendant paths at a glance.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128274;</div>
+            <h3>Private</h3>
+            <p>All your links and notes are private. Only you can see them after you log in.</p>
+        </div>
+    </div>
+
+    <div class="landing-example">
+        <h2>How it works</h2>
+        <div class="example-paths">
+            <div class="example-path">
+                <span class="path-url">links.floholz.dev/<strong>github.com</strong></span>
+                <span class="path-desc">All GitHub links</span>
+            </div>
+            <div class="example-path child">
+                <span class="path-url">links.floholz.dev/<strong>github.com/myorg</strong></span>
+                <span class="path-desc">Your org's repos</span>
+            </div>
+            <div class="example-path child child-2">
+                <span class="path-url">links.floholz.dev/<strong>github.com/myorg/project</strong></span>
+                <span class="path-desc">One specific project</span>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

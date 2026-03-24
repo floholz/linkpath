@@ -1,0 +1,63 @@
+{{define "edit_form.html"}}
+<div class="item-card item-{{.Item.GetString "type"}} item-editing" id="item-{{.Item.Id}}">
+    <form
+        hx-put="/~/items/{{.Item.Id}}"
+        hx-target="#item-{{.Item.Id}}"
+        hx-swap="outerHTML"
+        class="edit-form"
+    >
+        <input type="hidden" name="current_path" value="{{.CurrentPath}}">
+
+        <div class="form-header">
+            <span class="item-type-badge item-type-{{.Item.GetString "type"}}">
+                {{if eq (.Item.GetString "type") "link"}}&#128279; Link{{else}}&#128196; Note{{end}}
+            </span>
+            <div class="form-actions-inline">
+                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                <button
+                    type="button"
+                    class="btn btn-ghost btn-sm"
+                    hx-get="/~/items/{{.Item.Id}}?path={{.CurrentPath}}"
+                    hx-target="#item-{{.Item.Id}}"
+                    hx-swap="outerHTML"
+                >Cancel</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Title <span class="form-optional">(optional)</span></label>
+            <input
+                type="text"
+                name="title"
+                class="form-input"
+                value="{{.Item.GetString "title"}}"
+                maxlength="200"
+                autofocus
+            >
+        </div>
+
+        {{if eq (.Item.GetString "type") "link"}}
+        <div class="form-group">
+            <label class="form-label">URL</label>
+            <input
+                type="url"
+                name="url"
+                class="form-input"
+                value="{{.Item.GetString "url"}}"
+                placeholder="https://example.com"
+            >
+        </div>
+        {{else}}
+        <div class="form-group">
+            <label class="form-label">Content <span class="form-hint">(Markdown supported)</span></label>
+            <textarea
+                name="body"
+                class="form-textarea"
+                rows="6"
+                placeholder="Write your note in Markdown..."
+            >{{.Item.GetString "body"}}</textarea>
+        </div>
+        {{end}}
+    </form>
+</div>
+{{end}}

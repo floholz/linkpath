@@ -1,0 +1,87 @@
+package main
+
+import (
+	"context"
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/pocketbase/pocketbase"
+	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/plugins/migratecmd"
+
+	"linkpath/internal/handlers"
+	"linkpath/internal/middleware"
+	"linkpath/internal/render"
+
+	_ "linkpath/migrations"
+)
+
+func main() {
+	app := pocketbase.New()
+
+	var appHTTPAddr string
+	app.RootCmd.PersistentFlags().StringVar(&appHTTPAddr, "app-http", "0.0.0.0:8080", "app HTTP server address")
+
+	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
+		Automigrate: true,
+	})
+
+	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
+		tmpl, err := render.New(TemplatesFS)
+		if err != nil {
+			return err
+		}
+
+		authMw := middleware.AuthMiddleware(app)
+		wrap := func(h http.HandlerFunc) http.Handler { return authMw(h) }
+
+		mux := http.NewServeMux()
+
+		// Static files
+		mux.Handle("/static/", http.FileServerFS(StaticFS))
+
+		// Public routes (prefixed with /~/ to avoid conflicting with linkpath paths)
+		mux.HandleFunc("GET /~/login", handlers.LoginPageHandler(app, tmpl))
+		mux.HandleFunc("POST /~/login", handlers.LoginHandler(app, tmpl))
+		mux.HandleFunc("GET /~/register", handlers.RegisterPageHandler(app, tmpl))
+		mux.HandleFunc("POST /~/register", handlers.RegisterHandler(app, tmpl))
+
+		// Auth-required routes
+		mux.Handle("POST /~/logout", wrap(handlers.LogoutHandler(app, tmpl)))
+		mux.Handle("GET /~/items/add-form", wrap(handlers.AddFormHandler(app, tmpl)))
+		mux.Handle("POST /~/items", wrap(handlers.CreateItemHandler(app, tmpl)))
+		mux.Handle("GET /~/items/{id}", wrap(handlers.GetItemHandler(app, tmpl)))
+		mux.Handle("GET /~/items/{id}/edit", wrap(handlers.EditItemHandler(app, tmpl)))
+		mux.Handle("PUT /~/items/{id}", wrap(handlers.UpdateItemHandler(app, tmpl)))
+		mux.Handle("DELETE /~/items/{id}", wrap(handlers.DeleteItemHandler(app, tmpl)))
+
+		// Catch-all: handles / (landing/home) and all path views
+		mux.HandleFunc("/", handlers.PathHandler(app, tmpl))
+
+		appServer := &http.Server{
+			Addr:    appHTTPAddr,
+			Handler: mux,
+		}
+
+		app.OnTerminate().BindFunc(func(te *core.TerminateEvent) error {
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			_ = appServer.Shutdown(ctx)
+			return te.Next()
+		})
+
+		go func() {
+			log.Printf("App server listening on http://%s", appHTTPAddr)
+			if err := appServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+				log.Printf("App server error: %v", err)
+			}
+		}()
+
+		return se.Next()
+	})
+
+	if err := app.Start(); err != nil {
+		log.Fatal(err)
+	}
+}

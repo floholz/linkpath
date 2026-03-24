@@ -1,0 +1,21 @@
+services:
+  linkpath:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+      - "8080:8080"
+    volumes:
+      - pb_data:/app/pb_data
+    environment:
+      - TZ=UTC
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.linkpath.rule=Host(`linkpa.th`)"
+      - "traefik.http.routers.linkpath.entrypoints=websecure"
+      - "traefik.http.routers.linkpath.tls.certresolver=letsencrypt"
+      - "traefik.http.services.linkpath.loadbalancer.server.port=8080"
+
+volumes:
+  pb_data:
+    driver: local
