@@ -12,6 +12,22 @@
         <nav class="sidebar-nav">
             <a href="/" class="sidebar-home {{if not .CurrentPath}}active{{end}}">&#127968; Home</a>
 
+            {{if .AncestorGroups}}
+            <div class="sidebar-section">
+                <h3 class="sidebar-section-title">Parent paths</h3>
+                <ul class="path-list">
+                    {{range .AncestorGroups}}
+                    <li class="path-item">
+                        <a href="/{{.Path}}" class="path-link">
+                            <span class="path-icon">&#8593;</span>
+                            <span class="path-name">/{{.Path}}</span>
+                        </a>
+                    </li>
+                    {{end}}
+                </ul>
+            </div>
+            {{end}}
+
             {{if .DescendantPaths}}
             <div class="sidebar-section">
                 <h3 class="sidebar-section-title">Subpaths</h3>
