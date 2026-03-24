@@ -1,55 +1,77 @@
 package render
 
 import (
+	"fmt"
 	"html/template"
 	"io/fs"
 	"net/http"
 )
 
-// Templates holds parsed HTML templates.
+// Templates holds per-page template sets and a shared partial set.
 type Templates struct {
-	t *template.Template
+	pages    map[string]*template.Template
+	partials *template.Template
 }
 
-// New parses all templates from the given filesystem.
-// The filesystem should be rooted at the directory containing the templates folder.
+var funcMap = template.FuncMap{
+	"safeHTML": func(s string) template.HTML {
+		return template.HTML(s)
+	},
+}
+
+// New builds the template sets from the given filesystem.
+// Each page gets its own set (base + page) so {{define "content"}} blocks don't
+// overwrite each other across pages.
 func New(fsys fs.FS) (*Templates, error) {
 	tmplFS, err := fs.Sub(fsys, "templates")
 	if err != nil {
 		return nil, err
 	}
 
-	funcMap := template.FuncMap{
-		"safeHTML": func(s string) template.HTML {
-			return template.HTML(s)
-		},
-	}
-
-	t, err := template.New("").Funcs(funcMap).ParseFS(tmplFS,
-		"base.html",
-		"landing.html",
-		"login.html",
-		"register.html",
-		"path.html",
+	// Shared partial set — used for HTMX swap responses.
+	partials, err := template.New("").Funcs(funcMap).ParseFS(tmplFS,
 		"partials/item_card.html",
 		"partials/add_form.html",
 		"partials/edit_form.html",
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("parse partials: %w", err)
 	}
 
-	return &Templates{t: t}, nil
+	// Per-page sets: base.html + page file (+ item_card partial for path.html
+	// which calls {{template "item_card_inner" .}} inline).
+	pageFiles := map[string][]string{
+		"landing.html":  {"base.html", "landing.html"},
+		"login.html":    {"base.html", "login.html"},
+		"register.html": {"base.html", "register.html"},
+		"path.html":     {"base.html", "path.html", "partials/item_card.html"},
+	}
+
+	pages := make(map[string]*template.Template, len(pageFiles))
+	for name, files := range pageFiles {
+		t, err := template.New("").Funcs(funcMap).ParseFS(tmplFS, files...)
+		if err != nil {
+			return nil, fmt.Errorf("parse %s: %w", name, err)
+		}
+		pages[name] = t
+	}
+
+	return &Templates{pages: pages, partials: partials}, nil
 }
 
-// Render executes the named template with the given data, writing to w.
+// Render executes the named page template using the "base" layout.
 func (tmpl *Templates) Render(w http.ResponseWriter, name string, data any) error {
+	t, ok := tmpl.pages[name]
+	if !ok {
+		http.Error(w, "template not found: "+name, http.StatusInternalServerError)
+		return fmt.Errorf("template not found: %s", name)
+	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return tmpl.t.ExecuteTemplate(w, name, data)
+	return t.ExecuteTemplate(w, "base", data)
 }
 
-// RenderPartial executes a partial template (no base layout) with the given data.
+// RenderPartial executes a named partial template (no base layout).
 func (tmpl *Templates) RenderPartial(w http.ResponseWriter, name string, data any) error {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return tmpl.t.ExecuteTemplate(w, name, data)
+	return tmpl.partials.ExecuteTemplate(w, name, data)
 }
