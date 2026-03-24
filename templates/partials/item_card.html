@@ -4,48 +4,41 @@
 
 {{define "item_card_inner"}}
 <div class="item-card item-{{.Item.GetString "type"}}" id="item-{{.Item.Id}}">
+    {{if eq (.Item.GetString "type") "link"}}
+    <div class="item-link-row">
+        <span class="item-type-badge item-type-link">&#128279;</span>
+        <a href="{{.Item.GetString "url"}}" class="item-link-text" target="_blank" rel="noopener noreferrer">
+            {{if .Item.GetString "title"}}{{.Item.GetString "title"}}{{else if .Item.GetString "url"}}{{.Item.GetString "url"}}{{else}}(no URL){{end}}
+        </a>
+        {{if not .ReadOnly}}
+        <div class="item-actions">
+            <button class="btn btn-icon" hx-get="/~/items/{{.Item.Id}}/edit?path={{.CurrentPath}}" hx-target="#item-{{.Item.Id}}" hx-swap="outerHTML" title="Edit">&#9998;</button>
+            <button class="btn btn-icon btn-danger" hx-delete="/~/items/{{.Item.Id}}" hx-target="#item-{{.Item.Id}}" hx-swap="outerHTML" hx-confirm="Delete this item?" title="Delete">&#128465;</button>
+        </div>
+        {{end}}
+    </div>
+    {{else if eq (.Item.GetString "type") "note"}}
     <div class="item-header">
         <div class="item-meta">
-            <span class="item-type-badge item-type-{{.Item.GetString "type"}}">
-                {{if eq (.Item.GetString "type") "link"}}&#128279; Link{{else}}&#128196; Note{{end}}
-            </span>
+            <span class="item-type-badge item-type-note">&#128196; Note</span>
             {{if .Item.GetString "title"}}
             <span class="item-title">{{.Item.GetString "title"}}</span>
             {{end}}
         </div>
         {{if not .ReadOnly}}
         <div class="item-actions">
-            <button
-                class="btn btn-icon"
-                hx-get="/~/items/{{.Item.Id}}/edit?path={{.CurrentPath}}"
-                hx-target="#item-{{.Item.Id}}"
-                hx-swap="outerHTML"
-                title="Edit"
-            >&#9998;</button>
-            <button
-                class="btn btn-icon btn-danger"
-                hx-delete="/~/items/{{.Item.Id}}"
-                hx-target="#item-{{.Item.Id}}"
-                hx-swap="outerHTML"
-                hx-confirm="Delete this item?"
-                title="Delete"
-            >&#128465;</button>
+            <button class="btn btn-icon" hx-get="/~/items/{{.Item.Id}}/edit?path={{.CurrentPath}}" hx-target="#item-{{.Item.Id}}" hx-swap="outerHTML" title="Edit">&#9998;</button>
+            <button class="btn btn-icon btn-danger" hx-delete="/~/items/{{.Item.Id}}" hx-target="#item-{{.Item.Id}}" hx-swap="outerHTML" hx-confirm="Delete this item?" title="Delete">&#128465;</button>
         </div>
         {{end}}
     </div>
-
     <div class="item-content">
-        {{if eq (.Item.GetString "type") "link"}}
-            <a href="{{.Item.GetString "url"}}" class="item-url" target="_blank" rel="noopener noreferrer">
-                {{if .Item.GetString "url"}}{{.Item.GetString "url"}}{{else}}(no URL){{end}}
-            </a>
-        {{else if eq (.Item.GetString "type") "note"}}
-            {{if .BodyHTML}}
-            <div class="item-body markdown-body">{{safeHTML .BodyHTML}}</div>
-            {{else if .Item.GetString "body"}}
-            <div class="item-body">{{.Item.GetString "body"}}</div>
-            {{end}}
+        {{if .BodyHTML}}
+        <div class="item-body markdown-body">{{safeHTML .BodyHTML}}</div>
+        {{else if .Item.GetString "body"}}
+        <div class="item-body">{{.Item.GetString "body"}}</div>
         {{end}}
     </div>
+    {{end}}
 </div>
 {{end}}

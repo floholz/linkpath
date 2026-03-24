@@ -535,7 +535,6 @@ code {
 .path-layout {
   display: flex;
   min-height: calc(100vh - var(--header-height) - 80px);
-  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
@@ -837,6 +836,31 @@ code {
 
 .item-content {
   min-width: 0;
+}
+
+.item-card.item-link {
+  padding: 0.5rem 1.25rem;
+}
+
+.item-link-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.item-link-text {
+  color: var(--color-link);
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.item-link-text:hover {
+  color: var(--color-link-hover);
 }
 
 .item-url {
