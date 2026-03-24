@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/pocketbase/dbx"
@@ -34,6 +35,7 @@ func PathHandler(app core.App, tmpl *render.Templates) http.HandlerFunc {
 				tmpl.Render(w, "landing.html", map[string]any{"User": nil})
 				return
 			}
+			userPaths := loadUserPaths(app, user.Id)
 			tmpl.Render(w, "path.html", map[string]any{
 				"User":            user,
 				"CurrentPath":     "",
@@ -41,6 +43,7 @@ func PathHandler(app core.App, tmpl *render.Templates) http.HandlerFunc {
 				"AncestorGroups":  []AncestorGroupData{},
 				"DescendantPaths": []string{},
 				"IsHome":          true,
+				"UserPaths":       userPaths,
 			})
 			return
 		}
@@ -119,6 +122,38 @@ func PathHandler(app core.App, tmpl *render.Templates) http.HandlerFunc {
 			"IsHome":          false,
 		})
 	}
+}
+
+// loadUserPaths returns all distinct node paths where the user has at least one item.
+func loadUserPaths(app core.App, userId string) []string {
+	items, err := app.FindRecordsByFilter(
+		"items",
+		"user = {:userId}",
+		"",
+		2000, 0,
+		dbx.Params{"userId": userId},
+	)
+	if err != nil {
+		return nil
+	}
+
+	seen := make(map[string]struct{})
+	for _, item := range items {
+		seen[item.GetString("node")] = struct{}{}
+	}
+
+	paths := make([]string, 0, len(seen))
+	for nodeId := range seen {
+		node, err := app.FindRecordById("nodes", nodeId)
+		if err != nil {
+			continue
+		}
+		paths = append(paths, node.GetString("path"))
+	}
+
+	// Sort paths for consistent display
+	sort.Strings(paths)
+	return paths
 }
 
 func resolveUser(app core.App, r *http.Request) *core.Record {

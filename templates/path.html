@@ -35,8 +35,19 @@
         {{if .IsHome}}
         <div class="path-header">
             <h1 class="path-title">Dashboard</h1>
-            <p class="path-hint">Navigate to any path to start adding links and notes. Try <a href="/example.com">/example.com</a>.</p>
         </div>
+        {{if .UserPaths}}
+        <div class="home-paths">
+            {{range .UserPaths}}
+            <a href="/{{.}}" class="home-path-card">
+                <span class="home-path-icon">&#128193;</span>
+                <span class="home-path-name">/{{.}}</span>
+            </a>
+            {{end}}
+        </div>
+        {{else}}
+        <p class="path-hint">Navigate to any path to start adding links and notes. Try <a href="/example.com">/example.com</a>.</p>
+        {{end}}
         {{else}}
         <div class="path-header">
             {{if .AncestorGroups}}

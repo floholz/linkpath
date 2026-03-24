@@ -92,7 +92,6 @@ code {
 }
 
 .header-inner {
-  max-width: 1400px;
   margin: 0 auto;
   padding: 0 1.5rem;
   height: 100%;
@@ -714,6 +713,39 @@ code {
 .path-hint {
   color: var(--color-text-secondary);
   margin-top: 0.75rem;
+}
+
+.home-paths {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.home-path-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.home-path-card:hover {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.home-path-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ===========================
