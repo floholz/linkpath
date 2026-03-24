@@ -8,21 +8,21 @@
   --color-border: #2A2A2A;
   --color-border-light: #383838;
   --color-text: #D8E4E0;
-  --color-text-secondary: #6a7a70;
-  --color-text-muted: #3a3a3a;
-  --color-primary: #6BAF7E;
-  --color-primary-hover: #5a9d6d;
-  --color-primary-light: rgba(107,175,126,0.15);
-  --color-secondary: #C4A96B;
-  --color-secondary-hover: #b3963a;
-  --color-note: #C4A96B;
-  --color-note-hover: #b3963a;
-  --color-success: #6BAF7E;
+  --color-text-secondary: #666666;
+  --color-text-muted: #444444;
+  --color-primary: #0ea5e9;
+  --color-primary-hover: #0284c7;
+  --color-primary-light: rgba(14,165,233,0.12);
+  --color-secondary: #eab308;
+  --color-secondary-hover: #ca8a04;
+  --color-note: #eab308;
+  --color-note-hover: #ca8a04;
+  --color-success: #0ea5e9;
   --color-danger: #c0635a;
   --color-danger-hover: #a8524a;
-  --color-warning: #C4A96B;
-  --color-link: #73A8C8;
-  --color-link-hover: #96c0d8;
+  --color-warning: #eab308;
+  --color-link: #38bdf8;
+  --color-link-hover: #7dd3fc;
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
@@ -270,7 +270,7 @@ code {
 .form-input:focus,
 .form-textarea:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(107,175,126,0.2);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.2);
 }
 
 .form-input::placeholder,
@@ -307,9 +307,9 @@ code {
 }
 
 .alert-success {
-  background: rgba(107,175,126,0.1);
+  background: rgba(14,165,233,0.1);
   color: var(--color-primary);
-  border-color: rgba(107,175,126,0.3);
+  border-color: rgba(14,165,233,0.3);
 }
 
 /* ===========================
@@ -377,7 +377,7 @@ code {
   font-size: 3.5rem;
   font-weight: 800;
   letter-spacing: -0.04em;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(135deg, var(--color-primary) 35%, white 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -788,7 +788,7 @@ code {
 
 .item-card.item-editing {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(107,175,126,0.15);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
 }
 
 .item-header {
@@ -821,12 +821,12 @@ code {
 }
 
 .item-type-link {
-  background: rgba(115,168,200,0.15);
+  background: rgba(56,189,248,0.12);
   color: var(--color-link);
 }
 
 .item-type-note {
-  background: rgba(196,169,107,0.15);
+  background: rgba(234,179,8,0.12);
   color: var(--color-note);
 }
 
