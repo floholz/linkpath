@@ -3,7 +3,7 @@
     <form
         hx-post="/~/items"
         hx-target="#items-list"
-        hx-swap="afterbegin"
+        hx-swap="beforeend"
         hx-on::after-request="if(event.detail.successful) restoreAddButtons()"
         class="add-form"
     >
@@ -21,19 +21,6 @@
             >Cancel</button>
         </div>
 
-        <div class="form-group">
-            <label for="add-title" class="form-label">Title <span class="form-optional">(optional)</span></label>
-            <input
-                type="text"
-                id="add-title"
-                name="title"
-                class="form-input"
-                placeholder="Descriptive title..."
-                maxlength="200"
-                autofocus
-            >
-        </div>
-
         {{if eq .Type "link"}}
         <div class="form-group">
             <label for="add-url" class="form-label">URL</label>
@@ -43,6 +30,18 @@
                 name="url"
                 class="form-input"
                 placeholder="https://example.com"
+                autofocus
+            >
+        </div>
+        <div class="form-group">
+            <label for="add-title" class="form-label">Display Text <span class="form-optional">(optional)</span></label>
+            <input
+                type="text"
+                id="add-title"
+                name="title"
+                class="form-input"
+                placeholder="Label shown instead of URL..."
+                maxlength="200"
             >
         </div>
         {{else}}
@@ -54,6 +53,7 @@
                 class="form-textarea"
                 placeholder="Write your note in Markdown..."
                 rows="5"
+                autofocus
             ></textarea>
         </div>
         {{end}}

@@ -19,6 +19,15 @@ type AncestorGroupData struct {
 	ItemCards []ItemCard
 }
 
+// buildItemCards builds a slice of ItemCards from a slice of records.
+func buildItemCards(records []*core.Record, currentPath string) []ItemCard {
+	cards := make([]ItemCard, 0, len(records))
+	for _, r := range records {
+		cards = append(cards, buildItemCard(r, currentPath, false))
+	}
+	return cards
+}
+
 // buildItemCard builds an ItemCard from a record, rendering markdown if needed.
 func buildItemCard(record *core.Record, currentPath string, readOnly bool) ItemCard {
 	var bodyHTML string

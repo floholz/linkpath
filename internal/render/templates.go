@@ -31,6 +31,7 @@ func New(fsys fs.FS) (*Templates, error) {
 	// Shared partial set — used for HTMX swap responses.
 	partials, err := template.New("").Funcs(funcMap).ParseFS(tmplFS,
 		"partials/item_card.html",
+		"partials/items_list.html",
 		"partials/add_form.html",
 		"partials/edit_form.html",
 	)
@@ -44,7 +45,7 @@ func New(fsys fs.FS) (*Templates, error) {
 		"landing.html":  {"base.html", "landing.html"},
 		"login.html":    {"base.html", "login.html"},
 		"register.html": {"base.html", "register.html"},
-		"path.html":     {"base.html", "path.html", "partials/item_card.html"},
+		"path.html":     {"base.html", "path.html", "partials/item_card.html", "partials/items_list.html"},
 	}
 
 	pages := make(map[string]*template.Template, len(pageFiles))

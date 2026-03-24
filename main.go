@@ -55,6 +55,7 @@ func main() {
 		mux.Handle("GET /~/items/{id}/edit", wrap(handlers.EditItemHandler(app, tmpl)))
 		mux.Handle("PUT /~/items/{id}", wrap(handlers.UpdateItemHandler(app, tmpl)))
 		mux.Handle("DELETE /~/items/{id}", wrap(handlers.DeleteItemHandler(app, tmpl)))
+		mux.Handle("POST /~/items/{id}/move", wrap(handlers.MoveItemHandler(app, tmpl)))
 
 		// Catch-all: handles / (landing/home) and all path views
 		mux.HandleFunc("/", handlers.PathHandler(app, tmpl))

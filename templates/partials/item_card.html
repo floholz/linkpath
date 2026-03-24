@@ -12,6 +12,8 @@
         </a>
         {{if not .ReadOnly}}
         <div class="item-actions">
+            <button class="btn btn-icon btn-move" hx-post="/~/items/{{.Item.Id}}/move?direction=up&path={{.CurrentPath}}" hx-target="#items-list" hx-swap="innerHTML" title="Move up">&#8593;</button>
+            <button class="btn btn-icon btn-move" hx-post="/~/items/{{.Item.Id}}/move?direction=down&path={{.CurrentPath}}" hx-target="#items-list" hx-swap="innerHTML" title="Move down">&#8595;</button>
             <button class="btn btn-icon" hx-get="/~/items/{{.Item.Id}}/edit?path={{.CurrentPath}}" hx-target="#item-{{.Item.Id}}" hx-swap="outerHTML" title="Edit">&#9998;</button>
             <button class="btn btn-icon btn-danger" hx-delete="/~/items/{{.Item.Id}}" hx-target="#item-{{.Item.Id}}" hx-swap="outerHTML" hx-confirm="Delete this item?" title="Delete">&#128465;</button>
         </div>
@@ -27,6 +29,8 @@
         </div>
         {{if not .ReadOnly}}
         <div class="item-actions">
+            <button class="btn btn-icon btn-move" hx-post="/~/items/{{.Item.Id}}/move?direction=up&path={{.CurrentPath}}" hx-target="#items-list" hx-swap="innerHTML" title="Move up">&#8593;</button>
+            <button class="btn btn-icon btn-move" hx-post="/~/items/{{.Item.Id}}/move?direction=down&path={{.CurrentPath}}" hx-target="#items-list" hx-swap="innerHTML" title="Move down">&#8595;</button>
             <button class="btn btn-icon" hx-get="/~/items/{{.Item.Id}}/edit?path={{.CurrentPath}}" hx-target="#item-{{.Item.Id}}" hx-swap="outerHTML" title="Edit">&#9998;</button>
             <button class="btn btn-icon btn-danger" hx-delete="/~/items/{{.Item.Id}}" hx-target="#item-{{.Item.Id}}" hx-swap="outerHTML" hx-confirm="Delete this item?" title="Delete">&#128465;</button>
         </div>
