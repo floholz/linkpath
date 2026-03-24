@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -61,11 +62,12 @@ func PathHandler(app core.App, tmpl *render.Templates) http.HandlerFunc {
 		items, err := app.FindRecordsByFilter(
 			"items",
 			"node = {:nodeId} && user = {:userId}",
-			"sort_order,created",
+			"+sort_order",
 			500, 0,
 			dbx.Params{"nodeId": node.Id, "userId": user.Id},
 		)
 		if err != nil {
+			log.Printf("PathHandler: error fetching items for node=%s user=%s: %v", node.Id, user.Id, err)
 			items = []*core.Record{}
 		}
 
@@ -86,7 +88,7 @@ func PathHandler(app core.App, tmpl *render.Templates) http.HandlerFunc {
 			ancestorItems, err := app.FindRecordsByFilter(
 				"items",
 				"node = {:nodeId} && user = {:userId}",
-				"sort_order,created",
+				"+sort_order",
 				500, 0,
 				dbx.Params{"nodeId": ancestorNode.Id, "userId": user.Id},
 			)

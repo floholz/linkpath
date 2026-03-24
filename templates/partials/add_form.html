@@ -4,7 +4,7 @@
         hx-post="/~/items"
         hx-target="#items-list"
         hx-swap="afterbegin"
-        hx-on::after-request="if(event.detail.successful) { document.getElementById('add-item-container').innerHTML = document.getElementById('add-item-container').dataset.original || '' }"
+        hx-on::after-request="if(event.detail.successful) restoreAddButtons()"
         class="add-form"
     >
         <input type="hidden" name="current_path" value="{{.CurrentPath}}">
