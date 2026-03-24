@@ -13,10 +13,18 @@ services:
       - PB_HTTP=0.0.0.0:8090
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.linkpath.rule=Host(`linkpa.th`)"
-      - "traefik.http.routers.linkpath.entrypoints=websecure"
-      - "traefik.http.routers.linkpath.tls.certresolver=letsencrypt"
-      - "traefik.http.services.linkpath.loadbalancer.server.port=8080"
+      # Application
+      - "traefik.http.routers.linkpath_app.rule=Host(`linkpa.th`)"
+      - "traefik.http.routers.linkpath_app.entrypoints=websecure"
+      - "traefik.http.routers.linkpath_app.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.linkpath_app.service=linkpath_app"
+      - "traefik.http.services.linkpath_app.loadbalancer.server.port=8080"
+      # Pocketbase
+      - "traefik.http.routers.linkpath_pb.rule=Host(`admin.linkpa.th`)"
+      - "traefik.http.routers.linkpath_pb.entrypoints=websecure"
+      - "traefik.http.routers.linkpath_pb.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.linkpath_pb.service=linkpath_pb"
+      - "traefik.http.services.linkpath_pb.loadbalancer.server.port=8090"
 
 volumes:
   pb_data:
