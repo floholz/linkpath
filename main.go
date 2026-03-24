@@ -87,7 +87,7 @@ func main() {
 		mux.Handle("POST /~/items/{id}/move", wrap(handlers.MoveItemHandler(app, tmpl)))
 
 		// Catch-all: handles / (landing/home) and all path views
-		mux.HandleFunc("/", handlers.PathHandler(app, tmpl))
+		mux.HandleFunc("/", handlers.PathHandler(app, tmpl, envOr("APP_HOST", "linkpa.th")))
 
 		appServer := &http.Server{
 			Addr:    appHTTPAddr,

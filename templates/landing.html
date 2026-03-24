@@ -8,7 +8,7 @@
         <h1 class="landing-title">LinkPath</h1>
         <p class="landing-tagline">Your URL-path-aware link &amp; note aggregator</p>
         <p class="landing-desc">
-            Prepend <code>links.floholz.dev/</code> to any URL path to get a personal page
+            Prepend <code>{{.AppHost}}/</code> to any URL path to get a personal page
             for storing links and notes, organized by the path hierarchy.
         </p>
         <div class="landing-actions">
@@ -44,15 +44,15 @@
         <h2>How it works</h2>
         <div class="example-paths">
             <div class="example-path">
-                <span class="path-url">links.floholz.dev/<strong>github.com</strong></span>
+                <span class="path-url">{{.AppHost}}/<strong>github.com</strong></span>
                 <span class="path-desc">All GitHub links</span>
             </div>
             <div class="example-path child">
-                <span class="path-url">links.floholz.dev/<strong>github.com/myorg</strong></span>
+                <span class="path-url">{{.AppHost}}/<strong>github.com/myorg</strong></span>
                 <span class="path-desc">Your org's repos</span>
             </div>
             <div class="example-path child child-2">
-                <span class="path-url">links.floholz.dev/<strong>github.com/myorg/project</strong></span>
+                <span class="path-url">{{.AppHost}}/<strong>github.com/myorg/project</strong></span>
                 <span class="path-desc">One specific project</span>
             </div>
         </div>

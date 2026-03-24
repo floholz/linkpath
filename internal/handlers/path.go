@@ -15,7 +15,7 @@ import (
 )
 
 // PathHandler handles all GET requests — serves landing, home dashboard, or path views.
-func PathHandler(app core.App, tmpl *render.Templates) http.HandlerFunc {
+func PathHandler(app core.App, tmpl *render.Templates, appHost string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		rawPath := strings.TrimPrefix(r.URL.Path, "/")
 
@@ -41,7 +41,7 @@ func PathHandler(app core.App, tmpl *render.Templates) http.HandlerFunc {
 		// Root: landing or home dashboard
 		if normalized == "" {
 			if user == nil {
-				tmpl.Render(w, "landing.html", map[string]any{"User": nil})
+				tmpl.Render(w, "landing.html", map[string]any{"User": nil, "AppHost": appHost})
 				return
 			}
 			userPaths := loadUserPaths(app, user.Id)
