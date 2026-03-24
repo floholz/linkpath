@@ -1,2 +1,10 @@
+# IDE
 .idea
+# Pocketbase
+pb_data
+# bin
+linkpath
+
+
+# local dev
 CONTINUE.md
