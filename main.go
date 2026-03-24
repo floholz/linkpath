@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/pocketbase/pocketbase"
@@ -17,11 +18,31 @@ import (
 	_ "linkpath/migrations"
 )
 
+func envOr(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return fallback
+}
+
 func main() {
 	app := pocketbase.New()
 
 	var appHTTPAddr string
-	app.RootCmd.PersistentFlags().StringVar(&appHTTPAddr, "app-http", "0.0.0.0:8080", "app HTTP server address")
+	app.RootCmd.PersistentFlags().StringVar(&appHTTPAddr, "app-http", envOr("APP_HTTP", "0.0.0.0:8080"), "app HTTP server address")
+
+	// Allow PB_HTTP env var to set PocketBase's own --http flag default.
+	if pbHTTP := os.Getenv("PB_HTTP"); pbHTTP != "" {
+		for _, sub := range app.RootCmd.Commands() {
+			if sub.Name() == "serve" {
+				if f := sub.Flags().Lookup("http"); f != nil {
+					f.DefValue = pbHTTP
+					_ = f.Value.Set(pbHTTP)
+				}
+				break
+			}
+		}
+	}
 
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
 		Automigrate: true,
