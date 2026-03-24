@@ -19,6 +19,15 @@ func PathHandler(app core.App, tmpl *render.Templates) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		rawPath := strings.TrimPrefix(r.URL.Path, "/")
 
+		// Reject paths with dot-prefixed segments (e.g. .well-known, .git).
+		// These are never valid linkpath paths and must not become nodes.
+		for _, seg := range strings.Split(rawPath, "/") {
+			if strings.HasPrefix(seg, ".") {
+				http.NotFound(w, r)
+				return
+			}
+		}
+
 		// Normalize; redirect if changed
 		normalized := pathutil.Normalize(rawPath)
 		if normalized != rawPath {

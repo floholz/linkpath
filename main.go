@@ -41,6 +41,14 @@ func main() {
 		// Static files
 		mux.Handle("/static/", http.FileServerFS(StaticFS))
 
+		// Reject common browser-generated paths that must never become nodes.
+		notFound := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			http.NotFound(w, r)
+		})
+		mux.Handle("/favicon.ico", notFound)
+		mux.Handle("/robots.txt", notFound)
+		mux.Handle("/.well-known/", notFound)
+
 		// Public routes (prefixed with /~/ to avoid conflicting with linkpath paths)
 		mux.HandleFunc("GET /~/login", handlers.LoginPageHandler(app, tmpl))
 		mux.HandleFunc("POST /~/login", handlers.LoginHandler(app, tmpl))
