@@ -20,6 +20,12 @@ RUN CGO_ENABLED=1 GOOS=linux go build -ldflags="-w -s" -o linkpath .
 # ===========================
 FROM alpine:3.19
 
+LABEL org.opencontainers.image.title="LinkPath" \
+      org.opencontainers.image.description="URL-path-aware link and note aggregator" \
+      org.opencontainers.image.url="https://github.com/floholz/linkpath" \
+      org.opencontainers.image.source="https://github.com/floholz/linkpath" \
+      org.opencontainers.image.licenses="GPL-3.0-only"
+
 WORKDIR /app
 
 # Install runtime dependencies
