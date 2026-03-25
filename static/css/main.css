@@ -81,16 +81,18 @@ code {
 }
 
 .brand {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  letter-spacing: -0.02em;
+  display: inline-flex;
   text-decoration: none;
 }
 
 .brand:hover {
-  color: var(--color-primary-hover);
   text-decoration: none;
+}
+
+.brand-logo {
+  height: 28px;
+  width: auto;
+  display: block;
 }
 
 /* ===========================
@@ -373,15 +375,11 @@ code {
   padding: 3rem 0 4rem;
 }
 
-.landing-title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  background: linear-gradient(135deg, var(--color-primary) 35%, white 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 1rem;
+.landing-logo {
+  height: 64px;
+  width: auto;
+  margin: 0 auto 1rem;
+  display: block;
 }
 
 .landing-tagline {
@@ -1134,10 +1132,6 @@ details[open] .ancestor-summary::before {
     padding: 1.25rem;
   }
 
-  .landing-title {
-    font-size: 2.5rem;
-  }
-
   .auth-card {
     padding: 1.75rem;
   }
@@ -1146,10 +1140,6 @@ details[open] .ancestor-summary::before {
 @media (max-width: 480px) {
   .landing {
     padding: 2rem 1rem;
-  }
-
-  .landing-title {
-    font-size: 2rem;
   }
 
   .example-path {
